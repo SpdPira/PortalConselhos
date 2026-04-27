@@ -1,0 +1,62 @@
+name: 🚀 Deploy Produção
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v3
+
+      - name: 🚀 Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVIDOR_HOST }}
+          username: ${{ secrets.SERVIDOR_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "🚀 Iniciando deploy em $(date)"
+
+            cd /var/www/sua-app
+
+            echo "📦 Colocando app em manutenção"
+            php artisan down || true
+
+            echo "🔄 Atualizando código"
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "📦 Instalando dependências"
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+            echo "⚙️ Rodando migrations"
+            php artisan migrate --force
+
+            echo "🧹 Limpando caches antigos"
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
+            echo "⚡ Otimizando Laravel"
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            echo "⚡ Otimizando Filament"
+            php artisan filament:optimize || true
+
+            echo "🔗 Storage link"
+            php artisan storage:link || true
+
+            echo "🔐 Ajustando permissões"
+            chmod -R 775 storage bootstrap/cache
+
+            echo "🟢 Retornando aplicação"
+            php artisan up
+
+            echo "✅ Deploy finalizado em $(date)"
