@@ -22,7 +22,7 @@ jobs:
           script: |
             echo "🚀 Iniciando deploy em $(date)"
 
-            cd /var/www/conselhos
+            cd /var/www/html/conselhos
 
             echo "📦 Colocando app em manutenção"
             php artisan down || true
