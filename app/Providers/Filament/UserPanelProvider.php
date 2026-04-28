@@ -30,8 +30,17 @@ class UserPanelProvider extends PanelProvider
             ->profile(\App\Filament\User\Pages\EditProfile::class)
             ->tenant(\App\Models\Conselho::class)
             ->tenantProfile(\App\Filament\User\Pages\Tenancy\EditConselhoProfile::class)
+            ->font('Instrument Sans')
             ->colors([
-                'primary' => '#b00e0b',
+                'primary'       => Color::generateV3Palette("#b00e0b"),
+                'danger'        => Color::generateV3Palette("#880000"),
+                'gray'          => Color::Zinc,
+                'info'          => Color::generateV3Palette("#000000"),
+                'success'       => Color::generateV3Palette("#00ff00"),
+                'warning'       => Color::Orange,
+            ])
+            ->assets([
+                \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')

@@ -6,6 +6,7 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Pages\Tenancy\EditTenantProfile;
+use Filament\Schemas\Schema;
 
 class EditConselhoProfile extends EditTenantProfile
 {
@@ -14,9 +15,9 @@ class EditConselhoProfile extends EditTenantProfile
         return 'Dados do Conselho';
     }
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 TextInput::make('nome')
                     ->label('Nome do Conselho')
@@ -25,6 +26,7 @@ class EditConselhoProfile extends EditTenantProfile
                 FileUpload::make('logotipo')
                     ->label('Logotipo')
                     ->image()
+                    ->disk('public')
                     ->directory('logotipos'),
                 TextInput::make('endereco')
                     ->label('Endereço')

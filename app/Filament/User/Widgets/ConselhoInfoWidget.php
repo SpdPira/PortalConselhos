@@ -6,17 +6,33 @@ use Filament\Widgets\Widget;
 
 class ConselhoInfoWidget extends Widget
 {
-    protected static string $view = 'filament.user.widgets.conselho-info-widget';
+    protected string $view = 'filament.user.widgets.conselho-info-widget';
 
     protected int | string | array $columnSpan = 'full';
 
     public function getViewData(): array
     {
         $conselho = filament()->getTenant();
+        
+        if (!$conselho) {
+            return [
+                'conselho' => null,
+                'membrosAtivos' => collect(),
+                'membrosInativos' => collect(),
+            ];
+        }
+
+        $membrosAtivos = $conselho->composicoes->filter(function($membro) {
+            if (!$membro->vigencia_fim) return true;
+            return \Carbon\Carbon::parse($membro->vigencia_fim)->endOfDay()->isFuture();
+        })->sortBy('nome');
+        
+        $membrosInativos = $conselho->composicoes->diff($membrosAtivos)->sortByDesc('vigencia_fim');
 
         return [
             'conselho' => $conselho,
-            'membros' => $conselho ? $conselho->composicoes()->where('vigencia_fim', '>=', now())->get() : [],
+            'membrosAtivos' => $membrosAtivos,
+            'membrosInativos' => $membrosInativos,
         ];
     }
 }

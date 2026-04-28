@@ -84,27 +84,68 @@ class Show extends Component
     {
         $assuntos = Assunto::orderBy('descricao')->get();
         
-        $query = Calendario::with(['assunto', 'anexos'])
-            ->where('id_conselho', $this->conselho->id);
+        $calendarios = collect();
 
-        if ($this->assunto_id) {
-            $query->where('id_assunto', $this->assunto_id);
+        if ($this->assunto_id === 'ex-membros') {
+            // Special query for ex-members
+            $query = $this->conselho->composicoes()
+                ->withTrashed()
+                ->where(function($q) {
+                    $q->whereNotNull('vigencia_fim')
+                      ->where('vigencia_fim', '<', now()->startOfDay())
+                      ->orWhereNotNull('deleted_at');
+                });
+
+            if ($this->ano) {
+                $query->whereRaw('EXTRACT(YEAR FROM COALESCE(vigencia_fim, deleted_at)) = ?', [$this->ano]);
+            }
+            if ($this->mes) {
+                $query->whereRaw('EXTRACT(MONTH FROM COALESCE(vigencia_fim, deleted_at)) = ?', [$this->mes]);
+            }
+
+            $membros = $query->orderByDesc('vigencia_fim')->get();
+
+            // Map to compatible structure
+            $calendarios = $membros->map(function($m) {
+                $dataRef = $m->vigencia_fim ?: $m->deleted_at ?: $m->created_at;
+                return (object)[
+                    'id' => 'm-' . $m->id,
+                    'created_at' => \Carbon\Carbon::parse($dataRef),
+                    'data' => \Carbon\Carbon::parse($dataRef),
+                    'assunto' => (object)['descricao' => 'Ex-Membros'],
+                    'descricao' => "{$m->nome} - {$m->funcao} (" . ($m->segmento ?: 'N/A') . ")",
+                    'anexos' => collect()
+                ];
+            });
+        } else {
+            // Standard query for Calendario
+            $query = Calendario::with(['assunto', 'anexos'])
+                ->where('id_conselho', $this->conselho->id);
+
+            if ($this->assunto_id) {
+                $query->where('id_assunto', $this->assunto_id);
+            }
+
+            if ($this->ano) {
+                $query->whereRaw('EXTRACT(YEAR FROM COALESCE(data, created_at)) = ?', [$this->ano]);
+            }
+
+            if ($this->mes) {
+                $query->whereRaw('EXTRACT(MONTH FROM COALESCE(data, created_at)) = ?', [$this->mes]);
+            }
+
+            $calendarios = $query->latest(DB::raw('COALESCE(data, created_at)'))->get();
         }
 
-        if ($this->ano) {
-            $query->whereRaw('EXTRACT(YEAR FROM COALESCE(data, created_at)) = ?', [$this->ano]); // Fallback safe
-        }
-
-        if ($this->mes) {
-            $query->whereRaw('EXTRACT(MONTH FROM COALESCE(data, created_at)) = ?', [$this->mes]);
-        }
-
-        $calendarios = $query->latest(DB::raw('COALESCE(data, created_at)'))->get();
-
-        // Get available years for the filter (database agnostic)
-        $anosDisponiveis = Calendario::where('id_conselho', $this->conselho->id)
+        // Get available years for the filter
+        $anosCalendario = Calendario::where('id_conselho', $this->conselho->id)
             ->get()
-            ->map(fn($ev) => $ev->data ? $ev->data->format('Y') : $ev->created_at->format('Y'))
+            ->map(fn($ev) => \Carbon\Carbon::parse($ev->data ?: $ev->created_at)->format('Y'));
+            
+        $anosComposicao = $this->conselho->composicoes()->withTrashed()->get()
+            ->map(fn($m) => \Carbon\Carbon::parse($m->vigencia_fim ?: $m->deleted_at ?: $m->created_at)->format('Y'));
+
+        $anosDisponiveis = $anosCalendario->concat($anosComposicao)
             ->filter()
             ->unique()
             ->sortDesc()

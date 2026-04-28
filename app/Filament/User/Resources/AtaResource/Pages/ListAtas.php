@@ -8,6 +8,6 @@ class ListAtas extends ListRecords
     protected static string $resource = AtaResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()];
+        return [Actions\CreateAction::make()->label(__('Cadastrar Ata'))];
     }
 }

@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             AssuntoSeeder::class,
             ConselhoSeeder::class,
+            FakeDataSeeder::class,
         ]);
     }
 }

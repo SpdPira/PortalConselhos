@@ -8,6 +8,6 @@ class ListLegislacaos extends ListRecords
     protected static string $resource = LegislacaoResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()];
+        return [Actions\CreateAction::make()->label(__('Incluir Legislação'))];
     }
 }

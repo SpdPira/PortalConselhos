@@ -2,12 +2,20 @@
 
 namespace App\Filament\User\Resources;
 
+use Filament\Schemas\Schema;
+
 use App\Filament\User\Resources\ReuniaoOrdinariaResource\Pages;
-use App\Models\Calendario;
 use App\Models\Assunto;
+use App\Models\Calendario;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Forms\Form;
+
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,14 +23,14 @@ use Illuminate\Database\Eloquent\Builder;
 class ReuniaoOrdinariaResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static ?string $navigationIcon = 'heroicon-o-users';
-    protected static ?string $modelLabel = 'Reuniões Ordinárias';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
+    protected static ?string $modelLabel = 'Reunião Ordinária';
     protected static ?string $pluralModelLabel = 'Reuniões Ordinárias';
     protected static ?string $slug = 'reuniaoordinarias';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título da Reunião')->required(),
                 Forms\Components\DatePicker::make('data')->required(),
@@ -38,13 +46,13 @@ class ReuniaoOrdinariaResource extends Resource
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

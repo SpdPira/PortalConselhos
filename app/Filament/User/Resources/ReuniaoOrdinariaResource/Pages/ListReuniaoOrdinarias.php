@@ -8,6 +8,6 @@ class ListReuniaoOrdinarias extends ListRecords
     protected static string $resource = ReuniaoOrdinariaResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()];
+        return [Actions\CreateAction::make()->label(__('Cadastrar Reunião Ordinária'))];
     }
 }

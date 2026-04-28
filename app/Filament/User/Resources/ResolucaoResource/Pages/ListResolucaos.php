@@ -8,6 +8,6 @@ class ListResolucaos extends ListRecords
     protected static string $resource = ResolucaoResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()];
+        return [Actions\CreateAction::make()->label(__('Incluir Resolução'))];
     }
 }

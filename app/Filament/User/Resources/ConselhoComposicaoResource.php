@@ -2,11 +2,21 @@
 
 namespace App\Filament\User\Resources;
 
+use Filament\Schemas\Schema;
+
 use App\Filament\User\Resources\ConselhoComposicaoResource\Pages;
 use App\Models\ConselhoComposicao;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
+use Filament\Actions\RestoreAction;
+use Filament\Actions\RestoreBulkAction;
 use Filament\Forms;
-use Filament\Forms\Form;
+
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,14 +26,14 @@ class ConselhoComposicaoResource extends Resource
 {
     protected static ?string $model = ConselhoComposicao::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-users';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
 
     protected static ?string $modelLabel = 'Membro da Diretoria';
     protected static ?string $pluralModelLabel = 'Membros da Diretoria';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('nome')
                     ->required()
@@ -65,15 +75,15 @@ class ConselhoComposicaoResource extends Resource
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\RestoreAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
+                RestoreAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
-                    Tables\Actions\RestoreBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
+                    RestoreBulkAction::make(),
                 ]),
             ]);
     }

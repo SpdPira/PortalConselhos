@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\HasName;
 use Illuminate\Database\Eloquent\Model;
 
-class Conselho extends Model
+class Conselho extends Model implements HasName
 {
     protected $guarded = [];
+
+    public function getFilamentName(): string
+    {
+        return $this->nome;
+    }
 
     public function composicoes()
     {

@@ -47,7 +47,7 @@ function getConselhoIcon($nome) {
     @foreach ($conselhos as $conselho)
         <a href="{{ route('conselhos.show', $conselho->id) }}" class="flex flex-col bg-white rounded-lg shadow-sm hover:shadow transition-shadow border border-zinc-200 hover:border-primary overflow-hidden h-full">
             <div class="p-5 flex-1 flex flex-col justify-center items-center text-center gap-3">
-                <div class="w-16 h-16 rounded bg-zinc-50 flex items-center justify-center border border-zinc-100 mb-1 overflow-hidden p-1">
+                <div class="w-32 h-32 rounded bg-zinc-50 flex items-center justify-center border border-zinc-100 mb-1 overflow-hidden p-1">
                     @if($conselho->logotipo)
                         <img src="{{ Storage::url($conselho->logotipo) }}" alt="Logo {{ $conselho->nome }}" class="w-full h-full object-contain">
                     @else

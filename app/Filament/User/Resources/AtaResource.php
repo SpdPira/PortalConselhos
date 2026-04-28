@@ -2,12 +2,20 @@
 
 namespace App\Filament\User\Resources;
 
+use Filament\Schemas\Schema;
+
 use App\Filament\User\Resources\AtaResource\Pages;
-use App\Models\Calendario;
 use App\Models\Assunto;
+use App\Models\Calendario;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Forms\Form;
+
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,14 +23,14 @@ use Illuminate\Database\Eloquent\Builder;
 class AtaResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static ?string $navigationIcon = 'heroicon-o-document-check';
-    protected static ?string $modelLabel = 'Atas';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-check';
+    protected static ?string $modelLabel = 'Ata';
     protected static ?string $pluralModelLabel = 'Atas';
     protected static ?string $slug = 'atas';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título do Documento')->required(),
                 Forms\Components\DatePicker::make('data')->label('Data de Publicação')->required(),
@@ -38,13 +46,13 @@ class AtaResource extends Resource
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

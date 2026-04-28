@@ -35,10 +35,16 @@
                 @if($conselho->facebook || $conselho->instagram)
                     <div class="flex items-start gap-4">
                         @if($conselho->facebook)
-                            <a href="{{ $conselho->facebook }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">Facebook</a>
+                            <a href="{{ $conselho->facebook }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.733 0-1.325.593-1.325 1.326v21.348c0 .733.593 1.326 1.325 1.326h11.495v-9.294h-3.128v-3.622h3.128v-2.672c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.466.099 2.797.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.312h3.591l-.467 3.622h-3.124v9.294h6.116c.73 0 1.323-.593 1.323-1.326v-21.348c0-.733-.593-1.326-1.324-1.326z"></path></svg>
+                                Facebook
+                            </a>
                         @endif
                         @if($conselho->instagram)
-                            <a href="{{ $conselho->instagram }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">Instagram</a>
+                            <a href="{{ $conselho->instagram }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">
+                                <svg style="width: 1.25rem; height: 1.25rem; color: #b00e0b;" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3h-8.5zm10.71-.21a1.08 1.08 0 11-2.16-.002c0 .597.483 1.08 1.08 1.08s1.08-.483 1.08-1.08zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.5a3.5 3.5 0 100 7A3.5 3.5 0 0012 8z"></path></svg>
+                                Instagram
+                            </a>
                         @endif
                     </div>
                 @endif
@@ -52,7 +58,7 @@
         @php
             $membrosAtivos = $conselho->composicoes->filter(function($membro) {
                 if (!$membro->vigencia_fim) return true;
-                return \Carbon\Carbon::parse($membro->vigencia_fim)->endOfDay()->isFuture();
+                return \Carbon\Carbon::parse($membro->vigencia_fim)->isFuture();
             })->sortBy('nome');
             
             $membrosInativos = $conselho->composicoes->diff($membrosAtivos)->sortByDesc('vigencia_fim');
@@ -81,29 +87,8 @@
             <p class="text-zinc-500 italic">Nenhum membro ativo no momento.</p>
         @endif
 
-        @if($membrosInativos->count() > 0)
-            <details class="mt-8 group">
-                <summary class="cursor-pointer text-sm font-bold text-zinc-500 hover:text-primary list-none flex items-center gap-2 border-t border-zinc-100 pt-4">
-                    <svg class="w-4 h-4 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    Ver Histórico de Membros Anteriores
-                </summary>
-                <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4 opacity-75">
-                    @foreach($membrosInativos as $membro)
-                        <li class="bg-zinc-50 p-4 rounded border border-zinc-200 flex flex-col gap-1">
-                            <p class="font-bold text-zinc-600 text-base uppercase">{{ $membro->nome }}</p>
-                            @if($membro->funcao)
-                                <p class="text-sm font-semibold text-zinc-500">{{ $membro->funcao }}</p>
-                            @endif
-                            @if($membro->vigencia_inicio && $membro->vigencia_fim)
-                                <p class="text-xs text-zinc-400">Vigência: {{ \Carbon\Carbon::parse($membro->vigencia_inicio)->format('d/m/Y') }} a {{ \Carbon\Carbon::parse($membro->vigencia_fim)->format('d/m/Y') }}</p>
-                            @endif
-                            @if($membro->segmento)
-                                <p class="text-xs font-medium text-zinc-400 mt-2 uppercase tracking-wide border-t border-zinc-200 pt-2">{{ $membro->segmento }}</p>
-                            @endif
-                        </li>
-                    @endforeach
-                </ul>
-            </details>
+        @if($membrosAtivos->count() === 0)
+            <p class="text-zinc-500 italic">Nenhum membro ativo no momento.</p>
         @endif
     </div>
     @endif
@@ -113,13 +98,13 @@
         <div class="flex items-center justify-between mb-6 border-b border-zinc-100 pb-4">
             <h3 class="text-xl font-bold text-zinc-800">Calendário de Atividades</h3>
             <div class="flex items-center gap-4">
-                <button wire:click="prevMonth" class="p-2 rounded hover:bg-zinc-100 text-[#660000] transition-colors">
+                <button wire:click="prevMonth" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
                 <span class="text-lg font-semibold text-primary capitalize w-40 text-center">
                     {{ \Carbon\Carbon::createFromDate($calendarYear, $calendarMonth, 1)->translatedFormat('F Y') }}
                 </span>
-                <button wire:click="nextMonth" class="p-2 rounded hover:bg-zinc-100 text-[#660000] transition-colors">
+                <button wire:click="nextMonth" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
@@ -187,6 +172,7 @@
                 <label for="assunto" class="block text-sm font-medium text-zinc-700 mb-1">Assunto</label>
                 <select wire:model.live="assunto_id" id="assunto" class="w-full rounded-md border-zinc-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 text-zinc-800 p-2 border">
                     <option value="">Todos</option>
+                    <option value="ex-membros" class="font-bold text-primary italic">-- EX-MEMBROS --</option>
                     @foreach($assuntos as $assunto)
                         <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
                     @endforeach
@@ -226,7 +212,8 @@
                     'Resoluções' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
                     'Recomendações' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
                     'Reuniões Ordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>',
-                    'Reuniões Extraordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>'
+                    'Reuniões Extraordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
+                    'Ex-Membros' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>'
                 ];
                 $defaultIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
             @endphp
@@ -266,8 +253,8 @@
                                     @if($calendario->anexos->count() > 0)
                                         <div class="flex flex-col gap-1">
                                             @foreach($calendario->anexos as $anexo)
-                                                <a href="{{ Storage::url($anexo->caminho) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-zinc-700 hover:text-danger bg-zinc-50 hover:bg-zinc-100 px-2 py-1.5 border border-zinc-200 rounded shadow-sm w-full transition-colors" title="Ver Anexo">
-                                                    <svg class="w-3.5 h-3.5 shrink-0 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                                                <a href="{{ Storage::url($anexo->caminho) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-white bg-primary hover:bg-danger px-2 py-1.5 border border-primary rounded shadow-sm w-full transition-colors" title="Ver Anexo">
+                                                    <svg class="w-3.5 h-3.5 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
                                                     <span>Baixar</span>
                                                 </a>
                                             @endforeach

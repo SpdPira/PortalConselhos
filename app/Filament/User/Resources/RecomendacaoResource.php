@@ -2,12 +2,20 @@
 
 namespace App\Filament\User\Resources;
 
+use Filament\Schemas\Schema;
+
 use App\Filament\User\Resources\RecomendacaoResource\Pages;
-use App\Models\Calendario;
 use App\Models\Assunto;
+use App\Models\Calendario;
+use BackedEnum;
+use Filament\Actions\BulkActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Actions\DeleteBulkAction;
+use Filament\Actions\EditAction;
 use Filament\Forms;
-use Filament\Forms\Form;
+
 use Filament\Resources\Resource;
+
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,14 +23,14 @@ use Illuminate\Database\Eloquent\Builder;
 class RecomendacaoResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static ?string $navigationIcon = 'heroicon-o-exclamation-circle';
-    protected static ?string $modelLabel = 'Recomendações';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-exclamation-circle';
+    protected static ?string $modelLabel = 'Recomendação';
     protected static ?string $pluralModelLabel = 'Recomendações';
     protected static ?string $slug = 'recomendacaos';
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título do Documento')->required(),
                 Forms\Components\DatePicker::make('data')->label('Data de Publicação')->required(),
@@ -38,13 +46,13 @@ class RecomendacaoResource extends Resource
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
             ])
-            ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+            ->recordActions([
+                EditAction::make(),
+                DeleteAction::make(),
             ])
-            ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            ->toolbarActions([
+                BulkActionGroup::make([
+                    DeleteBulkAction::make(),
                 ]),
             ]);
     }

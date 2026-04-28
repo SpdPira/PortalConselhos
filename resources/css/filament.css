@@ -1,0 +1,19 @@
+.fi-btn, .fi-icon-btn {
+    --primary-600: #b00e0b !important;
+    --primary-500: #b00e0b !important;
+    --primary-400: #b00e0b !important;
+}
+
+/* Force primary color on all buttons if they are not danger */
+button.fi-btn:not(.fi-color-danger), a.fi-btn:not(.fi-color-danger) {
+    background-color: #b00e0b !important;
+    color: white !important;
+}
+
+button.fi-btn:not(.fi-color-danger):hover, a.fi-btn:not(.fi-color-danger):hover {
+    background-color: #660000 !important;
+}
+
+.fi-icon-btn:not(.fi-color-danger) {
+    color: #b00e0b !important;
+}

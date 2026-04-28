@@ -28,8 +28,17 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->font('Instrument Sans')
             ->colors([
-                'primary' => '#b00e0b',
+                'primary'       => Color::generateV3Palette("#b00e0b"),
+                'danger'        => Color::generateV3Palette("#880000"),
+                'gray'          => Color::Zinc,
+                'info'          => Color::generateV3Palette("#000000"),
+                'success'       => Color::generateV3Palette("#00ff00"),
+                'warning'       => Color::Orange,
+            ])
+            ->assets([
+                \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

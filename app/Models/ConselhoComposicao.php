@@ -10,6 +10,14 @@ class ConselhoComposicao extends Model
     use SoftDeletes;
 
     protected $guarded = [];
+    
+    protected function casts(): array
+    {
+        return [
+            'vigencia_inicio' => 'date',
+            'vigencia_fim' => 'date',
+        ];
+    }
 
     public function conselho()
     {
