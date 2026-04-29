@@ -1,103 +1,37 @@
-name: 🚀 Premium Deploy Laravel + Filament
+name: Deploy
 
 on:
   push:
     branches:
       - master
-  workflow_dispatch:   
-
-concurrency:
-  group: production-deploy
-  cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Deploy Produção
     runs-on: ubuntu-latest
-    timeout-minutes: 20
 
     steps:
-      - name: 📥 Checkout código
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: 🚀 Publicar via SSH
+      - name: Deploy SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ vars.SERVIDOR_HOST }}
-          username: ${{ vars.SERVIDOR_USER }}
+          host: ${{ secrets.SERVIDOR_HOST }}
+          username: ${{ secrets.SERVIDOR_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          script_stop: true
-          command_timeout: 20m
           script: |
-            set -e
+            cd /var/www/html/PortalConselhos
 
-            APP_PATH="/var/www/html/PortalConselhos"
-            BACKUP_PATH="/var/www/backups/PortalConselhos"
-            DATA=$(date +%Y%m%d_%H%M%S)
+            php artisan down || true
 
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🚀 INICIANDO DEPLOY PREMIUM"
-            echo "📅 $DATA"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-
-            cd $APP_PATH
-
-            echo "📦 Criando diretório de backup..."
-            mkdir -p $BACKUP_PATH
-
-            echo "💾 Backup do .env"
-            cp .env $BACKUP_PATH/.env_$DATA
-
-            echo "💾 Backup banco (se MySQL configurado)"
-            if grep -q DB_DATABASE .env; then
-              DB_DATABASE=$(grep DB_DATABASE .env | cut -d '=' -f2)
-              DB_USERNAME=$(grep DB_USERNAME .env | cut -d '=' -f2)
-              DB_PASSWORD=$(grep DB_PASSWORD .env | cut -d '=' -f2)
-
-              mysqldump -u$DB_USERNAME -p$DB_PASSWORD $DB_DATABASE > $BACKUP_PATH/db_$DATA.sql || true
-            fi
-
-            echo "🟡 Ativando manutenção"
-            php artisan down --render="errors::503" || true
-
-            echo "🔄 Atualizando repositório"
             git fetch origin master
             git reset --hard origin/master
 
-            echo "📦 Instalando dependências"
-            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+            composer install --no-dev --optimize-autoloader --no-interaction
 
-            echo "⚙️ Rodando migrations"
             php artisan migrate --force
 
-            echo "🧹 Limpando caches"
-            php artisan optimize:clear
-
-            echo "⚡ Otimizando aplicação"
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
-            php artisan event:cache || true
 
-            echo "⚡ Otimizando Filament"
-            php artisan filament:optimize || true
-
-            echo "🔗 Storage link"
-            php artisan storage:link || true
-
-            echo "🔐 Corrigindo permissões"
-            chmod -R 775 storage bootstrap/cache
-
-            echo "🟢 Retornando aplicação"
             php artisan up
-
-            echo "🧪 Testando Laravel"
-            php artisan about
-
-            echo "🧹 Limpando backups antigos (+7 dias)"
-            find $BACKUP_PATH -type f -mtime +7 -delete || true
-
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "✅ DEPLOY FINALIZADO COM SUCESSO"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
