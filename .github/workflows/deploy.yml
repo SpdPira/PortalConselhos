@@ -22,9 +22,9 @@ jobs:
       - name: 🚀 Publicar via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SERVIDOR_HOST }}
-          username: ${{ secrets.SERVIDOR_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: ${"conselhos.pirassununga.sp.gov.br"}
+          username: ${"user_deploy"}
+          key: ${"ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCijsBmurhHGwvbhBQrz2Tc7ueIaR4XisgFxBtpXas2xJGcbwTtS+Oy1bwMrPqTjsAJWgTd7X7h9GenL0XHDVbvVDY2J2l0cynZG3vIphCNll3cDnT2hPdRpZke2a9N+2EoNzDTeoo/Cgto5YBAgvuv7i/DBYdKCws+YjF3CjXbhUiBmGxGfINoz1/3S8dblyZzOL4YbNKGlwYTRKh/zP0EnszAJOmwLGFZlG++W9GQO6O1gazlqd7HtiymzWBG22y3MpbPXlpqe9trR8QCOJTmM5WscmfyVj4mZuJW6Ucx+7r7Z1aGvpLgu9EYFj9OzDUfhpe9N4z1B6oubDHwOc4WmTmWKF5mB6DD7TTKlgdXQ6SN4UhkNlb2fwbwM2w57QHFbnyqIHetjMGpQpc2WAhSTVzeM3LAkKPMDi7i68ataqnmj5DZ5ijEwzkuoBNvOmbPy793oAkiZtE7cFUJH+3mukPrh4l0dEBpMf3LsVpg2I8iNnfkC5Wb98AnBQiKg5wNMK5FDm1fSg7+usRQh7J7in/eYwqViPH4TCCn/Dj0+huArjaEi3XjjjmKHH2jB8wJNXD+IB18kFYfTDifxOy84m2Pc1J3XHPgH870A7cPL2rtYkbOaVgRvXlFL6DMRSQwAOHSd9wQpF+ryaf9ekyDkBmvCdXfChinVrh+zlZjyw== user_deploy@SistemasWeb"}
           port: 22
           script_stop: true
           command_timeout: 20m
