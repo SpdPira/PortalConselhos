@@ -23,8 +23,8 @@ jobs:
       - name: 🚀 Publicar via SSH
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SERVIDOR_HOST }}
-          username: ${{ secrets.SERVIDOR_USER }}
+          host: ${{ vars.SERVIDOR_HOST }}
+          username: ${{ vars.SERVIDOR_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 2269
           script_stop: true
