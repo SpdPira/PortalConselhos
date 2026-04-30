@@ -1,36 +1,94 @@
-# This is a basic workflow to help you get started with Actions
+name: 🚀 Premium Deploy Laravel + Filament
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
+    branches:
+      - master
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+concurrency:
+  group: production-deploy
+  cancel-in-progress: false
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  deploy:
+    name: Deploy Produção
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: 🚀 Publicar via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SERVIDOR_HOST }}
+          username: ${{ secrets.SERVIDOR_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script_stop: true
+          command_timeout: 20m
+          script: |
+            set -e
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+            APP_PATH="/var/www/html/PortalConselhos"
+            BACKUP_PATH="/var/www/backups/PortalConselhos"
+            DATA=$(date +%Y%m%d_%H%M%S)
+
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "🚀 INICIANDO DEPLOY PREMIUM"
+            echo "📅 $DATA"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+            cd $APP_PATH
+
+            echo "📦 Criando diretório de backup..."
+            mkdir -p $BACKUP_PATH
+
+            echo "💾 Backup do .env"
+            cp .env $BACKUP_PATH/.env_$DATA
+
+            echo "🟡 Ativando manutenção"
+            php artisan down --render="errors::503" || true
+
+            echo "🔄 Atualizando repositório"
+            git fetch origin master
+            git reset --hard origin/master
+
+            echo "📦 Instalando dependências"
+            composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
+
+            echo "⚙️ Rodando migrations"
+            php artisan migrate --force
+
+            echo "🧹 Limpando caches"
+            php artisan optimize:clear
+
+            echo "⚡ Otimizando aplicação"
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+            php artisan event:cache || true
+
+            echo "⚡ Otimizando Filament"
+            php artisan filament:optimize || true
+
+            echo "🔗 Storage link"
+            php artisan storage:link || true
+
+            echo "🔐 Corrigindo permissões"
+            chmod -R 775 storage bootstrap/cache
+
+            echo "🟢 Retornando aplicação"
+            php artisan up
+
+            echo "🧪 Testando Laravel"
+            php artisan about
+
+            echo "🧹 Limpando backups antigos (+7 dias)"
+            find $BACKUP_PATH -type f -mtime +7 -delete || true
+
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            echo "✅ DEPLOY FINALIZADO COM SUCESSO"
+            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
