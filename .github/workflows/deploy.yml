@@ -26,7 +26,7 @@ jobs:
           host: ${{ secrets.SERVIDOR_HOST }}
           username: ${{ secrets.SERVIDOR_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
+          port: 2269
           script_stop: true
           command_timeout: 20m
           script: |
