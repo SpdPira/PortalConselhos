@@ -4,7 +4,12 @@ on:
   push:
     branches:
       - master
-  workflow_dispatch:      
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch para deploy'
+        required: true
+        default: 'master'  
 
 concurrency:
   group: production-deploy
