@@ -33,7 +33,6 @@ jobs:
             set -e
 
             APP_PATH="/var/www/html/PortalConselhos"
-            BACKUP_PATH="/var/www/backups/PortalConselhos"
             DATA=$(date +%Y%m%d_%H%M%S)
 
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -42,12 +41,6 @@ jobs:
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
             cd $APP_PATH
-
-            echo "📦 Criando diretório de backup..."
-            mkdir -p $BACKUP_PATH
-
-            echo "💾 Backup do .env"
-            cp .env $BACKUP_PATH/.env_$DATA
 
             echo "🟡 Ativando manutenção"
             php artisan down --render="errors::503" || true
