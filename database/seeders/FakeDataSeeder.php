@@ -20,7 +20,7 @@ class FakeDataSeeder extends Seeder
         $nomes = ['João Silva', 'Maria Santos', 'Carlos Oliveira', 'Ana Costa', 'Pedro Souza', 'Fernanda Lima', 'Lucas Pereira', 'Juliana Almeida', 'Roberto Alves', 'Camila Ribeiro'];
         $cargos = ['Presidente', 'Vice-Presidente', '1º Secretário', '2º Secretário', 'Tesoureiro', 'Suplente'];
         $segmentos = ['Poder Público', 'Sociedade Civil', 'Imprensa', 'Usuários', 'Especialistas'];
-
+            
         // Create Master Admin
         \App\Models\User::firstOrCreate(
             ['email' => 'programacao@pirassununga.sp.gov.br'],
