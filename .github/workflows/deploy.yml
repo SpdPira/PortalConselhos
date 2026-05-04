@@ -50,6 +50,7 @@ jobs:
             git reset --hard origin/master
 
             echo "📦 Instalando dependências"
+            rm -rf vendor
             composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader
 
             echo "⚙️ Rodando migrations"
