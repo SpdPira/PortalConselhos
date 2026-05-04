@@ -175,7 +175,7 @@
                     @foreach($assuntos as $assunto)
                         <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
                     @endforeach
-                    <option value="ex-membros" class="font-bold text-zinc-700 italic">Ex-Membros</option>
+                    <option value="ex-membros" class="text-zinc-700 italic">Ex-Membros</option>
                 </select>
             </div>
             <div>
