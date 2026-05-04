@@ -50,10 +50,8 @@ jobs:
             git reset --hard origin/master
 
             echo "📦 Instalando dependências"
-            echo "composer install --no-dev --prefer-dist --no-interaction --optimize-autoloader --no-progress"
 
-            echo "⚙️ Rodando migrations"
-            php artisan migrate --force
+            echo "⚙️ Rodando migrations php artisan migrate --force"
 
             echo "🧹 Limpando caches"
             php artisan optimize:clear
