@@ -172,7 +172,7 @@
                 <label for="assunto" class="block text-sm font-medium text-zinc-700 mb-1">Assunto</label>
                 <select wire:model.live="assunto_id" id="assunto" class="w-full rounded-md border-zinc-300 shadow-sm focus:border-primary focus:ring focus:ring-primary focus:ring-opacity-50 text-zinc-800 p-2 border">
                     <option value="">Todos</option>
-                    <option value="ex-membros" class="font-bold text-primary italic">-- EX-MEMBROS --</option>
+                    <option value="ex-membros" class="font-bold text-primary italic">Ex-Membros</option>
                     @foreach($assuntos as $assunto)
                         <option value="{{ $assunto->id }}">{{ $assunto->descricao }}</option>
                     @endforeach
