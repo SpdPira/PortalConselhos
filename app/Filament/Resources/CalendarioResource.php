@@ -38,7 +38,7 @@ class CalendarioResource extends Resource
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('data')
                     ->required(),
-                 Forms\Components\DateTimePicker::make('hora'),
+                Forms\Components\DateTimePicker::make('hora'),
                 Forms\Components\FileUpload::make('arquivo')
                     ->label('Arquivo Anexo')
                     ->acceptedFileTypes(['application/pdf'])
