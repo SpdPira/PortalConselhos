@@ -30,9 +30,6 @@ class ConselhoResource extends Resource
                 Forms\Components\TextInput::make('nome')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('descricao')
-                    ->label('Descrição')
-                    ->maxLength(65535),
                 Forms\Components\FileUpload::make('logotipo')
                     ->image()
                     ->disk('public')

@@ -34,7 +34,7 @@ class ReuniaoExtraordinariaResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título da Reunião')->required(),
                 Forms\Components\DatePicker::make('data')->required(),
-                Forms\Components\TimePicker::make('hora')->required(),
+                Forms\Components\DateTimePicker::make('hora')->required(),
                 Forms\Components\FileUpload::make('arquivo')
                     ->label('Anexar Pauta')
                     ->acceptedFileTypes(['application/pdf'])
