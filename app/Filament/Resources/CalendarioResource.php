@@ -38,7 +38,12 @@ class CalendarioResource extends Resource
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('data')
                     ->required(),
-                Forms\Components\TimePicker::make('hora'),
+                 Forms\Components\TimePicker::make('hora'),
+                Forms\Components\FileUpload::make('arquivo')
+                    ->label('Arquivo Anexo')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->openable()
+                    ->downloadable(),
             ]);
     }
 
@@ -59,6 +64,12 @@ class CalendarioResource extends Resource
                 Tables\Columns\TextColumn::make('data')
                     ->date('d/m/Y')
                     ->sortable(),
+                Tables\Columns\IconColumn::make('arquivo')
+                    ->label('Anexo')
+                    ->icon('heroicon-o-document-text')
+                    ->color('primary')
+                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->openUrlInNewTab(),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('conselho')

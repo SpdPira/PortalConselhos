@@ -20,9 +20,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
 
-    public function conselho(): BelongsTo
+    public function conselhos(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
     {
-        return $this->belongsTo(Conselho::class, 'id_conselho');
+        return $this->belongsToMany(Conselho::class, 'conselho_user');
     }
 
     public function canAccessPanel(Panel $panel): bool
@@ -32,24 +32,20 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         }
 
         if ($panel->getId() === 'user') {
-            return $this->id_conselho !== null;
+            return $this->conselhos()->exists();
         }
 
         return false;
     }
 
-    public function getTenants(Panel $panel): array|Collection
+    public function getTenants(Panel $panel): array|\Illuminate\Support\Collection
     {
-        if ($this->conselho) {
-            return collect([$this->conselho]);
-        }
-
-        return collect();
+        return $this->conselhos;
     }
 
     public function canAccessTenant(Model $tenant): bool
     {
-        return $this->id_conselho === $tenant->id;
+        return $this->conselhos->contains($tenant);
     }
 
     /**

@@ -8,6 +8,6 @@ class ListRecomendacaos extends ListRecords
     protected static string $resource = RecomendacaoResource::class;
     protected function getHeaderActions(): array
     {
-        return [Actions\CreateAction::make()->label(__('Cadastrar Recomendação'))];
+        return [Actions\CreateAction::make()->label(__('Cadastrar Recomendação / Ofício'))];
     }
 }

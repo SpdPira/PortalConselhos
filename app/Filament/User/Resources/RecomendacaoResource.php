@@ -24,8 +24,8 @@ class RecomendacaoResource extends Resource
 {
     protected static ?string $model = Calendario::class;
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-exclamation-circle';
-    protected static ?string $modelLabel = 'Recomendação';
-    protected static ?string $pluralModelLabel = 'Recomendações';
+    protected static ?string $modelLabel = 'Recomendação/Ofício';
+    protected static ?string $pluralModelLabel = 'Recomendações/Ofícios';
     protected static ?string $slug = 'recomendacaos';
 
     public static function form(Schema $schema): Schema
@@ -33,9 +33,15 @@ class RecomendacaoResource extends Resource
         return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título do Documento')->required(),
-                Forms\Components\DatePicker::make('data')->label('Data de Publicação')->required(),
-                // Anexos requires a relationship or field
-        
+                Forms\Components\DatePicker::make('data')->label('Data')->required(),
+                Forms\Components\FileUpload::make('arquivo')
+                    ->label('Anexar Ofício')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->disk('public')
+                    ->visibility('public')
+                    ->directory('oficios')
+                    ->openable()
+                    ->downloadable(),
             ]);
     }
 
@@ -45,6 +51,12 @@ class RecomendacaoResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
+                Tables\Columns\IconColumn::make('arquivo')
+                    ->label('Anexo')
+                    ->icon('heroicon-o-document-text')
+                    ->color('primary')
+                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
                 EditAction::make(),

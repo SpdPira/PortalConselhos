@@ -14,7 +14,6 @@ class AssuntoSeeder extends Seeder
     {
         $assuntos = [
             ['descricao' => 'Legislação'],
-            ['descricao' => 'Pautas'],
             ['descricao' => 'Atas'],
             ['descricao' => 'Resoluções'],
             ['descricao' => 'Recomendações'],

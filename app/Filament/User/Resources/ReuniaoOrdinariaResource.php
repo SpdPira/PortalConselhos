@@ -35,7 +35,14 @@ class ReuniaoOrdinariaResource extends Resource
                 Forms\Components\TextInput::make('descricao')->label('Título da Reunião')->required(),
                 Forms\Components\DatePicker::make('data')->required(),
                 Forms\Components\TimePicker::make('hora')->required(),
-        
+                Forms\Components\FileUpload::make('arquivo')
+                    ->label('Anexar Pauta')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->disk('public')
+                    ->visibility('public')
+                    ->directory('pautas')
+                    ->openable()
+                    ->downloadable(),
             ]);
     }
 
@@ -45,6 +52,12 @@ class ReuniaoOrdinariaResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
+                Tables\Columns\IconColumn::make('arquivo')
+                    ->label('Anexo')
+                    ->icon('heroicon-o-document-text')
+                    ->color('primary')
+                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
                 EditAction::make(),

@@ -33,9 +33,15 @@ class LegislacaoResource extends Resource
         return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título do Documento')->required(),
-                Forms\Components\DatePicker::make('data')->label('Data de Publicação')->required(),
-                // Anexos requires a relationship or field
-        
+                Forms\Components\DatePicker::make('data')->label('Data')->required(),
+                Forms\Components\FileUpload::make('arquivo')
+                    ->label('Anexar Documento da Legislação')
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->disk('public')
+                    ->visibility('public')
+                    ->directory('legislacao')
+                    ->openable()
+                    ->downloadable(),
             ]);
     }
 
@@ -45,6 +51,12 @@ class LegislacaoResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('descricao')->label('Descrição')->searchable(),
                 Tables\Columns\TextColumn::make('data')->date('d/m/Y')->sortable(),
+                Tables\Columns\IconColumn::make('arquivo')
+                    ->label('Anexo')
+                    ->icon('heroicon-o-document-text')
+                    ->color('primary')
+                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->openUrlInNewTab(),
             ])
             ->recordActions([
                 EditAction::make(),

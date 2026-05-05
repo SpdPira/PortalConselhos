@@ -14,6 +14,11 @@ class Conselho extends Model implements HasName
         return $this->nome;
     }
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'conselho_user');
+    }
+
     public function composicoes()
     {
         return $this->hasMany(ConselhoComposicao::class, 'id_conselho');

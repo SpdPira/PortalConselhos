@@ -44,9 +44,11 @@ class UserResource extends Resource
                         'user' => 'Representante de Conselho',
                     ])
                     ->required(),
-                Forms\Components\Select::make('id_conselho')
-                    ->label('Conselho')
-                    ->relationship('conselho', 'nome')
+                Forms\Components\Select::make('conselhos')
+                    ->label('Conselhos')
+                    ->relationship('conselhos', 'nome')
+                    ->multiple()
+                    ->preload()
                     ->nullable()
                     ->placeholder('Nenhum (para Admin Master)'),
                 Forms\Components\TextInput::make('password')
@@ -74,9 +76,10 @@ class UserResource extends Resource
                         'admin' => 'danger',
                         'user' => 'success',
                     }),
-                Tables\Columns\TextColumn::make('conselho.nome')
-                    ->label('Conselho')
-                    ->placeholder('Nenhum'),
+                Tables\Columns\TextColumn::make('conselhos.nome')
+                    ->label('Conselhos')
+                    ->placeholder('Nenhum')
+                    ->badge(),
             ])
             ->filters([
                 //

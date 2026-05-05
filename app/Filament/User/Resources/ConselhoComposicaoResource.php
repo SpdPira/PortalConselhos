@@ -28,8 +28,8 @@ class ConselhoComposicaoResource extends Resource
 
     protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
 
-    protected static ?string $modelLabel = 'Membro da Diretoria';
-    protected static ?string $pluralModelLabel = 'Membros da Diretoria';
+    protected static ?string $modelLabel = 'Membros';
+    protected static ?string $pluralModelLabel = 'Membros';
 
     public static function form(Schema $schema): Schema
     {
