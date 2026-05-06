@@ -40,6 +40,8 @@ class AdminPanelProvider extends PanelProvider
             ->assets([
                 \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
+            ->favicon(asset('assets/images/logo_pirassununga.png'))
+            ->brandName('Portal dos Conselhos')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
             ->pages([

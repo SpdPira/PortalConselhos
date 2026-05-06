@@ -42,6 +42,8 @@ class UserPanelProvider extends PanelProvider
             ->assets([
                 \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
+            ->favicon(asset('assets/images/logo_pirassununga.png'))
+            ->brandName('Portal dos Conselhos')
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
             ->pages([
