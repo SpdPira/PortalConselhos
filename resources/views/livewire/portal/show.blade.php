@@ -1,3 +1,5 @@
+<link rel="favicon" href="{{ asset('favicon.ico') }}">
+
 <div class="space-y-8 pb-12">
     <!-- Header -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 p-8 flex flex-col md:flex-row items-center md:items-start gap-6">

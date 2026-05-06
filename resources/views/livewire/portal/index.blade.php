@@ -43,6 +43,8 @@ function getConselhoIcon($nome) {
 }
 @endphp
 
+<link rel="favicon" href="{{ asset('favicon.ico') }}">
+
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-stretch">
     @foreach ($conselhos as $conselho)
         <a href="{{ route('conselhos.show', $conselho->id) }}" class="flex flex-col bg-white rounded-lg shadow-sm hover:shadow transition-shadow border border-zinc-200 hover:border-primary overflow-hidden h-full">
