@@ -21,11 +21,20 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
+        // Create Master Admin
+        \App\Models\User::firstOrCreate(
+            ['email' => 'programacao@pirassununga.sp.gov.br'],
+            [
+                'name' => 'Admin Programação',
+                'password' => \Illuminate\Support\Facades\Hash::make('Aaaaaa8*'),
+                'role' => 'admin',
+            ]
+        );        
 
         $this->call([
             AssuntoSeeder::class,
             ConselhoSeeder::class,
-            FakeDataSeeder::class,
+            //FakeDataSeeder::class,
         ]);
     }
 }
