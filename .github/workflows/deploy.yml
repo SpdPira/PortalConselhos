@@ -77,7 +77,7 @@ jobs:
             php artisan storage:link || true
 
             echo "🔐 Corrigindo permissões"
-            chmod -R 775 storage bootstrap/cache
+            echo "chmod -R 775 storage bootstrap/cache"
 
             echo "🟢 Retornando aplicação"
             php artisan up
