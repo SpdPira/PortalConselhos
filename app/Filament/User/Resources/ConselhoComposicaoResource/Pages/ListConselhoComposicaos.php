@@ -13,7 +13,7 @@ class ListConselhoComposicaos extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label(__('Cadastrar Membro da Diretoria')),
+            Actions\CreateAction::make()->label(__('Cadastrar Membro')),
         ];
     }
 }

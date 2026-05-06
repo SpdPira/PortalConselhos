@@ -9,7 +9,9 @@
     <body class="bg-zinc-50 text-zinc-900 min-h-screen">
         <header class="bg-primary text-white shadow">
             <div class="max-w-[80%] mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                <h1 class="text-3xl font-bold tracking-tight">PORTAL DOS CONSELHOS</h1>
+                <a href="{{ route('home') }}">
+                    <h1 class="text-3xl font-bold tracking-tight">PORTAL DOS CONSELHOS</h1>
+                </a>
             </div>
         </header>
 
