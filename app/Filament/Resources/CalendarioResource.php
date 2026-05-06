@@ -9,6 +9,7 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
+use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables;
@@ -38,7 +39,7 @@ class CalendarioResource extends Resource
                     ->maxLength(255),
                 Forms\Components\DatePicker::make('data')
                     ->required(),
-                Forms\Components\DateTimePicker::make('hora'),
+                TimePicker::make('hora'),
                 Forms\Components\FileUpload::make('arquivo')
                     ->label('Arquivo Anexo')
                     ->acceptedFileTypes(['application/pdf'])

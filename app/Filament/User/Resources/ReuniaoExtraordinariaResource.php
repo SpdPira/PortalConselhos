@@ -2,8 +2,6 @@
 
 namespace App\Filament\User\Resources;
 
-use Filament\Schemas\Schema;
-
 use App\Filament\User\Resources\ReuniaoExtraordinariaResource\Pages;
 use App\Models\Assunto;
 use App\Models\Calendario;
@@ -13,9 +11,10 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
-
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Resource;
-
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -33,8 +32,8 @@ class ReuniaoExtraordinariaResource extends Resource
         return $schema
             ->schema([
                 Forms\Components\TextInput::make('descricao')->label('Título da Reunião')->required(),
-                Forms\Components\DatePicker::make('data')->required(),
-                Forms\Components\DateTimePicker::make('hora')->required(),
+                DatePicker::make('data')->required(),
+                TimePicker::make('hora')->required(),
                 Forms\Components\FileUpload::make('arquivo')
                     ->label('Anexar Pauta')
                     ->acceptedFileTypes(['application/pdf'])
