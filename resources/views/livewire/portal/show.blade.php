@@ -1,5 +1,3 @@
-<link rel="favicon" href="{{ asset('favicon.ico') }}">
-
 <div class="space-y-8 pb-12">
     <!-- Header -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 p-8 flex flex-col md:flex-row items-center md:items-start gap-6">
@@ -66,7 +64,7 @@
             $membrosInativos = $conselho->composicoes->diff($membrosAtivos)->sortByDesc('vigencia_fim');
         @endphp
 
-        <h3 class="text-xl font-bold text-zinc-800 mb-6 border-b border-zinc-100 pb-2">Composição Atual</h3>
+        <h3 class="text-xl font-bold text-zinc-800 mb-6 border-b border-zinc-400 pb-2">Composição Atual</h3>
         
         @if($membrosAtivos->count() > 0)
             <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -97,35 +95,35 @@
 
     <!-- Calendário de Eventos -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 p-8 mb-8">
-        <div class="flex items-center justify-between mb-6 border-b border-zinc-100 pb-4">
+        <div class="flex items-center justify-between mb-6 border-b border-zinc-400 pb-4">
             <h3 class="text-xl font-bold text-zinc-800">Calendário de Atividades</h3>
             <div class="flex items-center gap-4">
-                <button wire:click="prevMonth" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
+                <button wire:click="prevMonth" wire:key="prev-month" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
                 <span class="text-lg font-semibold text-primary capitalize w-40 text-center">
                     {{ \Carbon\Carbon::createFromDate($calendarYear, $calendarMonth, 1)->translatedFormat('F Y') }}
                 </span>
-                <button wire:click="nextMonth" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
+                <button wire:click="nextMonth" wire:key="next-month" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
         </div>
 <div class="w-[77%] mx-auto">
-        <div class="grid grid-cols-7 gap-px bg-zinc-200 border border-zinc-200 rounded-lg overflow-hidden">
+        <div class="grid grid-cols-7 gap-px rounded-lg overflow-hidden" wire:key="calendar-grid-{{ $calendarYear }}-{{ $calendarMonth }}" style="background-color: #c0c0c0ff;">
             <!-- Dias da Semana -->
             @foreach(['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'] as $diaSemana)
-                <div class="bg-zinc-50 p-0 text-center text-[9px] sm:text-[9px] font-semibold text-zinc-500 uppercase tracking-wider">
+                <div class="bg-orange p-0 text-center text-[9px] sm:text-[9px] font-semibold text-zinc-600 uppercase tracking-wider">
                     {{ $diaSemana }}
                 </div>
             @endforeach
 
             <!-- Dias do Mês -->
             @foreach($this->calendarDays as $day)
-                <div class="bg-white h-14 sm:h-14 p-1 flex flex-col relative {{ $day['empty'] ? 'opacity-40 bg-zinc-50' : '' }} {{ isset($day['isToday']) && $day['isToday'] ? 'ring-2 ring-inset ring-primary bg-red-50/10' : '' }}">
+                <div class="h-14 sm:h-14 p-1 flex flex-col relative {{ $day['empty'] ? 'bg-zinc-100' : 'bg-white' }} {{ !empty($day['events']) ? 'ring-2 ring-inset ring-black z-10' : (isset($day['isToday']) && $day['isToday'] ? 'ring-2 ring-inset ring-primary bg-red-50/10 z-10' : '') }}">
                     @if(!$day['empty'])
                         <!-- Número do dia -->
-                        <span class="text-[9px] mt-[-4px] me-[-4px] sm:text-[9px] font-bold self-end mb-0 shrink-0 {{ isset($day['isToday']) && $day['isToday'] ? 'text-white bg-primary w-5 h-5 flex items-center justify-center rounded-full' : 'text-zinc-600' }}">
+                        <span class="text-[9px] mt-[-1em] me-[-1em] sm:text-[9px] font-bold self-end mb-0 shrink-0 {{ isset($day['isToday']) && $day['isToday'] ? 'text-white bg-primary w-5 h-5 flex items-center justify-center rounded-full' : 'text-zinc-600' }}">
                             {{ $day['day'] }}
                         </span>
                         
@@ -133,28 +131,39 @@
                         <div class="flex-1 overflow-y-auto custom-scrollbar text-center">
                             @foreach($day['events'] as $evento)
                                 @php
-                                    $assuntoNome = mb_strtolower($evento->assunto->descricao);
-                                    $bgColor = 'bg-zinc-100 text-zinc-700 border-zinc-200'; // Default cinza
-                                    
-                                    if (str_contains($assuntoNome, 'reunião') || str_contains($assuntoNome, 'reuniao')) {
-                                        $bgColor = 'bg-red-100 text-red-800 border-red-200'; // Primary/Vermelho
-                                    } elseif (str_contains($assuntoNome, 'pauta')) {
-                                        $bgColor = 'bg-emerald-100 text-emerald-800 border-emerald-200'; // Verde
-                                    } elseif (str_contains($assuntoNome, 'resoluç')) {
-                                        $bgColor = 'bg-amber-100 text-amber-800 border-amber-200'; // Laranja
+                                    $linkDoc = null;
+                                    if ($evento->arquivo) {
+                                        $linkDoc = Storage::url($evento->arquivo);
+                                    } elseif ($evento->anexos->count() > 0) {
+                                        $linkDoc = Storage::url($evento->anexos->first()->caminho);
                                     }
                                 @endphp
-                                <div class="text-[9px] text-center sm:text-[9px] p-0 rounded border {{ $bgColor }} leading-snug cursor-help break-words" title="{{ $evento->descricao }}">
-                                    @if($evento->hora)
-                                        <span class="font-bold flex justify-center items-center">
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                            {{ \Carbon\Carbon::parse($evento->hora)->format('H:i') }}
+                                
+                                @if($linkDoc)
+                                    <a href="{{ $linkDoc }}" target="_blank" class="block text-[9px] text-center sm:text-[9px] p-0 leading-snug cursor-pointer break-words text-zinc-700 hover:text-primary hover:underline group" title="Ver documento: {{ $evento->descricao ?: $evento->assunto->descricao }}">
+                                        @if($evento->hora)
+                                            <span class="font-bold flex justify-center items-center group-hover:text-primary">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                {{ \Carbon\Carbon::parse($evento->hora)->format('H:i') }}
+                                            </span>
+                                        @endif
+                                        <span class="font-medium block leading-tight group-hover:text-primary">
+                                            {{ str_replace(['Reuniões Ordinárias', 'Reuniões Extraordinárias'], ['Reunião Ordinária', 'Reunião Extraordinária'], $evento->assunto->descricao) }}
                                         </span>
-                                    @endif
-                                    <span class="font-medium block leading-tight">
-                                        {{ str_replace(['Reuniões Ordinárias', 'Reuniões Extraordinárias'], ['Reunião Ordinária', 'Reunião Extraordinária'], $evento->assunto->descricao) }}
-                                    </span>
-                                </div>
+                                    </a>
+                                @else
+                                    <div class="text-[9px] text-center sm:text-[9px] p-0 leading-snug cursor-help break-words text-zinc-700 opacity-75" title="{{ $evento->descricao ?: $evento->assunto->descricao }}">
+                                        @if($evento->hora)
+                                            <span class="font-bold flex justify-center items-center">
+                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                                {{ \Carbon\Carbon::parse($evento->hora)->format('H:i') }}
+                                            </span>
+                                        @endif
+                                        <span class="font-medium block leading-tight">
+                                            {{ str_replace(['Reuniões Ordinárias', 'Reuniões Extraordinárias'], ['Reunião Ordinária', 'Reunião Extraordinária'], $evento->assunto->descricao) }}
+                                        </span>
+                                    </div>
+                                @endif
                             @endforeach
                         </div>
                     @endif
@@ -166,7 +175,7 @@
 
     <!-- Arquivos e Registros (Filtros de Tabela Antigos) -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 p-8">
-        <h3 class="text-xl font-bold text-zinc-800 mb-6 border-b border-zinc-100 pb-2">Buscar Arquivos e Registros Anteriores</h3>
+        <h3 class="text-xl font-bold text-zinc-800 mb-6 border-b border-zinc-400 pb-2">Buscar Arquivos e Registros Anteriores</h3>
         
         <!-- Filtros (Livewire) -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8 bg-zinc-50 p-4 rounded border border-zinc-200">

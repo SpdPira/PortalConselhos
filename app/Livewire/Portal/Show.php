@@ -7,6 +7,7 @@ use App\Models\Calendario;
 use App\Models\Conselho;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Carbon\Carbon;
 
 class Show extends Component
 {
@@ -30,14 +31,14 @@ class Show extends Component
 
     public function prevMonth()
     {
-        $date = \Carbon\Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1)->subMonth();
+        $date = Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1)->subMonth();
         $this->calendarMonth = $date->month;
         $this->calendarYear = $date->year;
     }
 
     public function nextMonth()
     {
-        $date = \Carbon\Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1)->addMonth();
+        $date = Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1)->addMonth();
         $this->calendarMonth = $date->month;
         $this->calendarYear = $date->year;
     }
@@ -45,11 +46,11 @@ class Show extends Component
     #[\Livewire\Attributes\Computed]
     public function calendarDays()
     {
-        $startDate = \Carbon\Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1);
+        $startDate = Carbon::createFromDate($this->calendarYear, $this->calendarMonth, 1);
         $endDate = $startDate->copy()->endOfMonth();
 
         // Find events in this month
-        $eventos = Calendario::with('assunto')
+        $eventos = Calendario::with(['assunto', 'anexos'])
             ->where('id_conselho', $this->conselho->id)
             ->whereBetween(DB::raw('COALESCE(data, DATE(created_at))'), [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
             ->get();
@@ -73,8 +74,14 @@ class Show extends Component
                 'empty' => false,
                 'day' => $day,
                 'events' => $eventosPorDia[$day] ?? [],
-                'isToday' => now()->isSameDay(\Carbon\Carbon::createFromDate($this->calendarYear, $this->calendarMonth, $day))
+                'isToday' => now()->isSameDay(Carbon::createFromDate($this->calendarYear, $this->calendarMonth, $day))
             ];
+        }
+
+        // Preencher o restante da última semana com células vazias
+        $lastDayOfWeek = $endDate->dayOfWeek;
+        for ($i = $lastDayOfWeek; $i < 6; $i++) {
+            $days[] = ['empty' => true];
         }
 
         return $days;
@@ -110,8 +117,8 @@ class Show extends Component
                 $dataRef = $m->vigencia_fim ?: $m->deleted_at ?: $m->created_at;
                 return (object)[
                     'id' => 'm-' . $m->id,
-                    'created_at' => \Carbon\Carbon::parse($dataRef),
-                    'data' => \Carbon\Carbon::parse($dataRef),
+                    'created_at' => Carbon::parse($dataRef),
+                    'data' => Carbon::parse($dataRef),
                     'assunto' => (object)['descricao' => 'Ex-Membros'],
                     'descricao' => "{$m->nome} - {$m->funcao} (" . ($m->segmento ?: 'N/A') . ")",
                     'anexos' => collect()
@@ -140,10 +147,10 @@ class Show extends Component
         // Get available years for the filter
         $anosCalendario = Calendario::where('id_conselho', $this->conselho->id)
             ->get()
-            ->map(fn($ev) => \Carbon\Carbon::parse($ev->data ?: $ev->created_at)->format('Y'));
+            ->map(fn($ev) => Carbon::parse($ev->data ?: $ev->created_at)->format('Y'));
             
         $anosComposicao = $this->conselho->composicoes()->withTrashed()->get()
-            ->map(fn($m) => \Carbon\Carbon::parse($m->vigencia_fim ?: $m->deleted_at ?: $m->created_at)->format('Y'));
+            ->map(fn($m) => Carbon::parse($m->vigencia_fim ?: $m->deleted_at ?: $m->created_at)->format('Y'));
 
         $anosDisponiveis = $anosCalendario->concat($anosComposicao)
             ->filter()

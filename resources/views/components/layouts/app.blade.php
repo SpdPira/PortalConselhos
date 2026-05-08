@@ -4,6 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>{{ $title ?? 'Portal dos Conselhos' }}</title>
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="bg-zinc-50 text-zinc-900 min-h-screen">
