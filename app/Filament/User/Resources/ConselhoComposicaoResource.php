@@ -2,8 +2,6 @@
 
 namespace App\Filament\User\Resources;
 
-use Filament\Schemas\Schema;
-
 use App\Filament\User\Resources\ConselhoComposicaoResource\Pages;
 use App\Models\ConselhoComposicao;
 use BackedEnum;
@@ -14,9 +12,9 @@ use Filament\Actions\EditAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Forms;
-
 use Filament\Resources\Resource;
-
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -34,23 +32,32 @@ class ConselhoComposicaoResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                Forms\Components\TextInput::make('nome')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('funcao')
-                    ->label('Função')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('segmento')
-                    ->required()
-                    ->maxLength(255),
-                Forms\Components\DatePicker::make('vigencia_inicio')
-                    ->label('Vigência Inicial')
-                    ->required(),
-                Forms\Components\DatePicker::make('vigencia_fim')
-                    ->label('Vigência Final')
-                    ->required(),
+            ->components([
+                Section::make()
+                    ->columnSpanFull()
+                    ->schema([
+                        Forms\Components\TextInput::make('nome')
+                            ->required()
+                            ->columnSpan(4)
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('funcao')
+                            ->label('Função')
+                            ->required()
+                            ->columnSpan(2)
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('segmento')
+                            ->required()
+                            ->columnSpan(2)
+                            ->maxLength(255),
+                        Forms\Components\DatePicker::make('vigencia_inicio')
+                            ->label('Vigência Inicial')
+                            ->columnSpan(2)
+                            ->required(),
+                        Forms\Components\DatePicker::make('vigencia_fim')
+                            ->label('Vigência Final')
+                            ->columnSpan(2)
+                            ->required(),
+                    ])->columns(6),
             ]);
     }
 

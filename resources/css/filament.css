@@ -1,19 +1,65 @@
-.fi-btn, .fi-icon-btn {
+.fi-btn,
+.fi-icon-btn {
     --primary-600: #b00e0b !important;
     --primary-500: #b00e0b !important;
     --primary-400: #b00e0b !important;
 }
 
 /* Force primary color on all buttons if they are not danger */
-button.fi-btn:not(.fi-color-danger), a.fi-btn:not(.fi-color-danger) {
+button.fi-btn:not(.fi-color-danger),
+a.fi-btn:not(.fi-color-danger) {
     background-color: #b00e0b !important;
     color: white !important;
 }
 
-button.fi-btn:not(.fi-color-danger):hover, a.fi-btn:not(.fi-color-danger):hover {
+button.fi-btn:not(.fi-color-danger):hover,
+a.fi-btn:not(.fi-color-danger):hover {
     background-color: #660000 !important;
 }
 
 .fi-icon-btn:not(.fi-color-danger) {
     color: #b00e0b !important;
+}
+
+
+
+.filepond--root .filepond--drop-label {
+    position: absolute !important;
+    inset: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+    margin: 0 !important;
+
+    text-align: center !important;
+}
+
+.filepond--root .filepond--drop-label label {
+    all: unset;
+
+    width: 100% !important;
+    height: 100% !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    text-align: center !important;
+
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: #636363 !important;
+
+    cursor: pointer !important;
+}
+
+.dark .filepond--root .filepond--drop-label label {
+    color: #dbd1d1 !important;
+}
+
+.filepond--drop-label label {
+    min-height: 42px !important;
 }

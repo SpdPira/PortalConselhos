@@ -2,8 +2,6 @@
 
 namespace App\Filament\User\Resources;
 
-use Filament\Schemas\Schema;
-
 use App\Filament\User\Resources\LegislacaoResource\Pages;
 use App\Models\Assunto;
 use App\Models\Calendario;
@@ -13,9 +11,9 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Forms;
-
 use Filament\Resources\Resource;
-
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -31,17 +29,31 @@ class LegislacaoResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                Forms\Components\TextInput::make('descricao')->label('Título do Documento')->required(),
-                Forms\Components\DatePicker::make('data')->label('Data')->required(),
-                Forms\Components\FileUpload::make('arquivo')
-                    ->label('Anexar Documento da Legislação')
-                    ->acceptedFileTypes(['application/pdf'])
-                    ->disk('public')
-                    ->visibility('public')
-                    ->directory('legislacao')
-                    ->openable()
-                    ->downloadable(),
+            ->components([
+                Section::make()
+                    ->columnSpanFull()
+                    ->schema([
+                        Forms\Components\TextInput::make('descricao')
+                            ->label('Título do Documento')
+                            ->columnSpan(6)
+                            ->required(),
+                        Forms\Components\DatePicker::make('data')
+                            ->label('Data')
+                            ->columnSpan(3)
+                            ->required(),
+                        Forms\Components\FileUpload::make('arquivo')
+                            ->label('Anexar Documento da Legislação')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->disk('public')
+                            ->visibility('public')
+                            ->directory('legislacao')
+                            ->maxParallelUploads(1)
+                            ->previewable(false)
+                            ->uploadingMessage('Anexando arquivo...')
+                            ->columnSpan(3)
+                            ->panelLayout('compact')
+                            ->panelAspectRatio('12:1'),
+                    ])->columns(6),
             ]);
     }
 
@@ -55,7 +67,7 @@ class LegislacaoResource extends Resource
                     ->label('Anexo')
                     ->icon('heroicon-o-document-text')
                     ->color('primary')
-                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->url(fn($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
                     ->openUrlInNewTab(),
             ])
             ->recordActions([

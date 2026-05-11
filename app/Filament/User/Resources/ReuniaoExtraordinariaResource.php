@@ -14,6 +14,7 @@ use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TimePicker;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -30,18 +31,35 @@ class ReuniaoExtraordinariaResource extends Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                Forms\Components\TextInput::make('descricao')->label('Título da Reunião')->required(),
-                DatePicker::make('data')->required(),
-                TimePicker::make('hora')->required(),
-                Forms\Components\FileUpload::make('arquivo')
-                    ->label('Anexar Pauta')
-                    ->acceptedFileTypes(['application/pdf'])
-                    ->disk('public')
-                    ->visibility('public')
-                    ->directory('pautas')
-                    ->openable()
-                    ->downloadable(),
+            ->components([
+                Section::make()
+                    ->columnSpanFull()
+                    ->schema([
+                        Forms\Components\TextInput::make('descricao')
+                            ->label('Título da Reunião')
+                            ->columnSpan(6)
+                            ->required(),
+                        DatePicker::make('data')
+                            ->label('Data')
+                            ->columnSpan(1)
+                            ->required(),
+                        TimePicker::make('hora')
+                            ->label('Hora')
+                            ->columnSpan(1)
+                            ->required(),
+                        Forms\Components\FileUpload::make('arquivo')
+                            ->label('Anexar Pauta')
+                            ->acceptedFileTypes(['application/pdf'])
+                            ->disk('public')
+                            ->visibility('public')
+                            ->directory('pautas')
+                            ->maxParallelUploads(1)
+                            ->previewable(false)
+                            ->uploadingMessage('Anexando arquivo...')
+                            ->columnSpan(4)
+                            ->panelLayout('compact')
+                            ->panelAspectRatio('16:1'),
+                    ])->columns(6),
             ]);
     }
 
@@ -55,7 +73,7 @@ class ReuniaoExtraordinariaResource extends Resource
                     ->label('Anexo')
                     ->icon('heroicon-o-document-text')
                     ->color('primary')
-                    ->url(fn ($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
+                    ->url(fn($record) => $record->arquivo ? \Illuminate\Support\Facades\Storage::url($record->arquivo) : null)
                     ->openUrlInNewTab(),
             ])
             ->recordActions([
