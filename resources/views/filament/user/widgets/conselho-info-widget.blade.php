@@ -124,6 +124,19 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Card de Documentação, Termo de Consentimento e Manual do Usuário, ambos da pasta public -->
+            <div style="background-color: #ffffff; border-radius: 0.75rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); border: 1px solid #e4e4e7; padding: 2rem;">
+                <h3 style="font-size: 1.25rem; font-weight: 650; color: #27272a; margin: 0 0 2rem 0;">Documentação do Portal</h3>
+
+                <a href="{{ asset('Termo de Consentimento - Portal dos Conselhos.pdf') }}" target="_blank" style="background-color: rgba(250, 250, 250, 0.5); color: #000000; padding: 1rem 1.5rem; border-radius: 0.5rem; border: 1px solid #e2e2e2; text-decoration: none; font-weight: 600; display: inline-block; transition: background-color 0.2s; width: 250px; text-align: center;">
+                    Termo de Consentimento
+                </a>&nbsp;&nbsp;
+                <a href="{{ asset('Manual do Usuário - Portal dos Conselhos.pdf') }}" target="_blank" style="background-color: rgba(250, 250, 250, 0.5); color: #000000; padding: 1rem 1.5rem; border-radius: 0.5rem; border: 1px solid #e2e2e2; text-decoration: none; font-weight: 600; display: inline-block; transition: background-color 0.2s; width: 250px; text-align: center;">
+                    Manual do Usuário
+                </a>
+            </div>
+            
         </div>
     @else
         <div style="background-color: #ffffff; border-radius: 0.75rem; padding: 3rem; text-align: center; border: 1px dashed #d4d4d8;">
