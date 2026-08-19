@@ -20,16 +20,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Garante consistência do redirect_uri com o host/porta atual para evitar erro de "Invalid state"
-        if (!app()->runningInConsole()) {
-            config(['oidc-client.auth_server.redirect_uri' => request()->schemeAndHttpHost() . '/auth/callback']);
-        }
-
-        $this->app->bind(
-            \Filament\Auth\Http\Responses\Contracts\LogoutResponse::class,
-            \App\Http\Responses\LogoutResponse::class
-        );
-
         \Filament\Support\Facades\FilamentView::registerRenderHook(
             \Filament\View\PanelsRenderHook::HEAD_END,
             fn (): string => '<style>

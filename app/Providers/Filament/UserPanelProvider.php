@@ -8,6 +8,7 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
+use Filament\Enums\ThemeMode;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
@@ -26,13 +27,7 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('user')
-            //->login()
-            ->userMenuItems([
-                \Filament\Navigation\MenuItem::make()
-                    ->label('Alterar Senha')
-                    ->url(fn () => env('SSO_PROVIDER_URL') . '/admin/profile')
-                    ->icon('heroicon-o-key'),
-            ])
+            ->login()
             ->tenant(\App\Models\Conselho::class)
             ->tenantProfile(\App\Filament\User\Pages\Tenancy\EditConselhoProfile::class)
             ->font('Instrument Sans')
@@ -53,6 +48,7 @@ class UserPanelProvider extends PanelProvider
             ->brandName('Portal dos Conselhos')
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
+            ->defaultThemeMode(ThemeMode::Light) // modo light
             ->pages([
                 Dashboard::class,
             ])
