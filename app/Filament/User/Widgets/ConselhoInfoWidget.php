@@ -3,6 +3,7 @@
 namespace App\Filament\User\Widgets;
 
 use Filament\Widgets\Widget;
+use Illuminate\Support\Facades\Auth;
 
 class ConselhoInfoWidget extends Widget
 {
@@ -12,6 +13,9 @@ class ConselhoInfoWidget extends Widget
 
     public function getViewData(): array
     {
+        // enviar dados do usuário para o widget
+        $user = Auth::user();
+
         $conselho = filament()->getTenant();
         
         if (!$conselho) {
@@ -30,6 +34,7 @@ class ConselhoInfoWidget extends Widget
         $membrosInativos = $conselho->composicoes->diff($membrosAtivos)->sortByDesc('vigencia_fim');
 
         return [
+            'user' => $user,
             'conselho' => $conselho,
             'membrosAtivos' => $membrosAtivos,
             'membrosInativos' => $membrosInativos,

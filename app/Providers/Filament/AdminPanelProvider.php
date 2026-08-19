@@ -27,20 +27,28 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            //->login()
             ->font('Instrument Sans')
+            ->userMenuItems([
+                \Filament\Navigation\MenuItem::make()
+                    ->label('Alterar Senha')
+                    ->url(fn () => env('SSO_PROVIDER_URL') . '/admin/profile')
+                    ->icon('heroicon-o-key'),
+            ])
             ->colors([
-                'primary'       => Color::generateV3Palette("#b00e0b"),
+                'primary'       => Color::Blue,
                 'danger'        => Color::generateV3Palette("#880000"),
-                'gray'          => Color::Zinc,
-                'info'          => Color::generateV3Palette("#000000"),
-                'success'       => Color::generateV3Palette("#00ff00"),
+                'info'          => Color::Gray,
+                'success'       => Color::generateV3Palette("#369b36ff"),
                 'warning'       => Color::Orange,
             ])
             ->assets([
                 \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
             ->favicon(asset('assets/images/logo_pirassununga.png'))
+            ->brandLogo(asset('assets/images/logo_pirassununga.png'))
+            ->darkModeBrandLogo(asset('assets/images/logo_pirassununga.png'))
+            ->brandLogoHeight('3rem')
             ->brandName('Portal dos Conselhos')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

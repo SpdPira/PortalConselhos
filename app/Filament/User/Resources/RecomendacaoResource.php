@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 class RecomendacaoResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-exclamation-circle';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-clipboard-document-list';
     protected static ?string $modelLabel = 'Recomendação/Ofício';
     protected static ?string $pluralModelLabel = 'Recomendações/Ofícios';
     protected static ?string $slug = 'recomendacaos';

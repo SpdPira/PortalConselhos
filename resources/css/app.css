@@ -6,10 +6,10 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Instrument Sans';
     
-    --color-primary-500: #b00e0b;
-    --color-primary: #b00e0b;
+    --color-primary-500: #2f4b86;
+    --color-primary: #2f4b86;
     --color-danger-500: #880000;
     --color-danger: #880000;
     --color-info-500: #000000;
@@ -19,16 +19,9 @@
     --color-warning-500: #f97316; /* orange-500 */
     --color-warning: #f97316;
 
-    /* Override blue colors to gray/zinc to prevent blue usage */
-    --color-blue-50: var(--color-zinc-50);
-    --color-blue-100: var(--color-zinc-100);
-    --color-blue-200: var(--color-zinc-200);
-    --color-blue-300: var(--color-zinc-300);
-    --color-blue-400: var(--color-zinc-400);
-    --color-blue-500: var(--color-zinc-500);
-    --color-blue-600: var(--color-zinc-600);
-    --color-blue-700: var(--color-zinc-700);
-    --color-blue-800: var(--color-zinc-800);
-    --color-blue-900: var(--color-zinc-900);
-    --color-blue-950: var(--color-zinc-950);
+    --color-zinc-50: #f9fafb;
+    --color-zinc-100: #f3f4f6;
+    --color-zinc-150: #e5e7eb;
+
+    --color-text: #3f3f46;
 }

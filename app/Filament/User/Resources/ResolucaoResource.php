@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ResolucaoResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-scale';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $modelLabel = 'Resolução';
     protected static ?string $pluralModelLabel = 'Resoluções';
     protected static ?string $slug = 'resolucaos';

@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 class ReuniaoExtraordinariaResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-star';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-user-group';
     protected static ?string $modelLabel = 'Reunião Extraordinária';
     protected static ?string $pluralModelLabel = 'Reuniões Extraordinárias';
     protected static ?string $slug = 'reuniaoextraordinarias';

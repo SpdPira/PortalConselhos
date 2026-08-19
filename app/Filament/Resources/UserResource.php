@@ -30,6 +30,7 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->label('Nome')
+                    ->placeholder('Nome completo do usuário')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
@@ -51,6 +52,16 @@ class UserResource extends Resource
                     ->preload()
                     ->nullable()
                     ->placeholder('Nenhum (para Admin Master)'),
+
+                Forms\Components\Select::make('tipo_representante')
+                    ->label('Tipo de Representante')
+                    ->options([
+                        'servidor' => 'Servidor Público',
+                        'sociedade' => 'Sociedade Civil',
+                    ])
+                    ->nullable()
+                    ->placeholder('Nenhum (para Admin Master)'),
+
                 Forms\Components\TextInput::make('password')
                     ->label('Senha')
                     ->password()
@@ -78,6 +89,10 @@ class UserResource extends Resource
                     }),
                 Tables\Columns\TextColumn::make('conselhos.nome')
                     ->label('Conselhos')
+                    ->placeholder('Nenhum')
+                    ->badge(),
+                Tables\Columns\TextColumn::make('tipo_representante')
+                    ->label('Tipo de Representante')
                     ->placeholder('Nenhum')
                     ->badge(),
             ])

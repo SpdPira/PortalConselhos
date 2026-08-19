@@ -25,6 +25,25 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         return $this->belongsToMany(Conselho::class, 'conselho_user');
     }
 
+    public function termAcceptances(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(TermAcceptance::class);
+    }
+
+    public function hasAcceptedTerms(?int $conselhoId = null): bool
+    {
+        $version = config('terms.version', '1.0');
+
+        return $this->termAcceptances()
+            ->where('version', $version)
+            ->when($conselhoId, function ($query, $id) {
+                return $query->where('conselho_id', $id);
+            }, function ($query) {
+                return $query->whereNull('conselho_id');
+            })
+            ->exists();
+    }
+
     public function canAccessPanel(Panel $panel): bool
     {
         if ($panel->getId() === 'admin') {
@@ -58,6 +77,9 @@ class User extends Authenticatable implements FilamentUser, HasTenants
         'email',
         'password',
         'terms_accepted_at',
+        'tipo_representante',
+        'oidc_sub',
+        'auth_server_refresh_token',
     ];
 
     /**

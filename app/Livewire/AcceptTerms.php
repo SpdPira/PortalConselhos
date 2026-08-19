@@ -12,8 +12,9 @@ class AcceptTerms extends Component
 
     public function mount()
     {
-        // Se o usuário já aceitou os termos, redireciona imediatamente
-        if (Auth::check() && Auth::user()->terms_accepted_at) {
+        $conselhoId = session()->get('terms_conselho_id');
+        // Se o usuário já aceitou os termos para este contexto, redireciona imediatamente
+        if (Auth::check() && Auth::user()->hasAcceptedTerms($conselhoId)) {
             $this->redirectToIntended();
         }
     }
@@ -28,8 +29,12 @@ class AcceptTerms extends Component
 
         $user = Auth::user();
         if ($user) {
-            $user->terms_accepted_at = now();
-            $user->save();
+            $conselhoId = session()->get('terms_conselho_id');
+            $user->termAcceptances()->create([
+                'version' => config('terms.version', '1.0'),
+                'conselho_id' => $conselhoId,
+                'ip_address' => request()->ip(),
+            ]);
         }
 
         $this->redirectToIntended();
@@ -78,6 +83,6 @@ class AcceptTerms extends Component
     public function render()
     {
         return view('livewire.accept-terms')
-            ->layout('components.layouts.app', ['title' => 'Termo de Consentimento']);
+            ->layout('components.layouts.app', ['title' => 'Termo de Ciência']); //, Responsabilidade e Uso do Portal dos Conselhos Municipais
     }
 }

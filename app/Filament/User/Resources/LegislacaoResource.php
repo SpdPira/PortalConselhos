@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 class LegislacaoResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-text';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-scale';
     protected static ?string $modelLabel = 'Legislação';
     protected static ?string $pluralModelLabel = 'Legislação';
     protected static ?string $slug = 'legislacaos';

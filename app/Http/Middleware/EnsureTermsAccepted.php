@@ -17,10 +17,34 @@ class EnsureTermsAccepted
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Se o usuário estiver autenticado e não tiver aceitado os termos ainda
-        if (Auth::check() && is_null(Auth::user()->terms_accepted_at)) {
+        $needsTerms = false;
+        $conselhoId = null;
+
+        if (Auth::check()) {
+            $panel = class_exists(\Filament\Facades\Filament::class) ? \Filament\Facades\Filament::getCurrentPanel() : null;
+            $panelId = $panel ? $panel->getId() : null;
             
-            // Permitir acesso à rota do termo de consentimento, rotas de logout e arquivos do Livewire/Vite
+            $shouldCheckTerms = true;
+            if ($panelId === 'user') {
+                $tenant = \Filament\Facades\Filament::getTenant();
+                if ($tenant) {
+                    $conselhoId = $tenant->id;
+                } else {
+                    $shouldCheckTerms = false;
+                }
+            }
+
+            if ($shouldCheckTerms && !Auth::user()->hasAcceptedTerms($conselhoId)) {
+                $needsTerms = true;
+                // Save current conselho_id in session so AcceptTerms knows which one is being accepted
+                session(['terms_conselho_id' => $conselhoId]);
+            }
+        }
+
+        // Se o usuário estiver autenticado e não tiver aceitado os termos ainda
+        if ($needsTerms) {
+            
+            // Permitir acesso à rota do termo de ciência, rotas de logout e arquivos do Livewire/Vite
             if ($request->is('termo-de-consentimento*') ||
                 $request->routeIs('terms.accept') ||
                 $request->is('*/logout') ||

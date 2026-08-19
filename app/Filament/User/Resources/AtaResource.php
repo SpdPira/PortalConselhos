@@ -21,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 class AtaResource extends Resource
 {
     protected static ?string $model = Calendario::class;
-    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-document-check';
+    protected static \BackedEnum|string|null $navigationIcon = 'heroicon-o-book-open';
     protected static ?string $modelLabel = 'Ata';
     protected static ?string $pluralModelLabel = 'Atas';
     protected static ?string $slug = 'atas';

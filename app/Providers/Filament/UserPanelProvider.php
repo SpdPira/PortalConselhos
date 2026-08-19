@@ -26,23 +26,30 @@ class UserPanelProvider extends PanelProvider
         return $panel
             ->id('user')
             ->path('user')
-            ->login()
-            ->profile(\App\Filament\User\Pages\EditProfile::class)
+            //->login()
+            ->userMenuItems([
+                \Filament\Navigation\MenuItem::make()
+                    ->label('Alterar Senha')
+                    ->url(fn () => env('SSO_PROVIDER_URL') . '/admin/profile')
+                    ->icon('heroicon-o-key'),
+            ])
             ->tenant(\App\Models\Conselho::class)
             ->tenantProfile(\App\Filament\User\Pages\Tenancy\EditConselhoProfile::class)
             ->font('Instrument Sans')
             ->colors([
-                'primary'       => Color::generateV3Palette("#b00e0b"),
+                'primary'       => Color::Blue,
                 'danger'        => Color::generateV3Palette("#880000"),
-                'gray'          => Color::Zinc,
-                'info'          => Color::generateV3Palette("#000000"),
-                'success'       => Color::generateV3Palette("#00ff00"),
+                'info'          => Color::Gray,
+                'success'       => Color::generateV3Palette("#369b36ff"),
                 'warning'       => Color::Orange,
             ])
             ->assets([
                 \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
             ])
             ->favicon(asset('assets/images/logo_pirassununga.png'))
+            ->brandLogo(asset('assets/images/logo_pirassununga.png'))
+            ->darkModeBrandLogo(asset('assets/images/logo_pirassununga.png'))
+            ->brandLogoHeight('3rem')
             ->brandName('Portal dos Conselhos')
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\\Filament\\User\\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\\Filament\\User\\Pages')
@@ -52,7 +59,7 @@ class UserPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\\Filament\\User\\Widgets')
             ->widgets([
                 \App\Filament\User\Widgets\ConselhoInfoWidget::class,
-                AccountWidget::class,
+                //AccountWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,

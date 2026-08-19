@@ -44,6 +44,7 @@ function getConselhoIcon($nome) {
 @endphp
 
 <link rel="favicon" href="{{ asset('favicon.ico') }}">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 items-stretch">
     @foreach ($conselhos as $conselho)

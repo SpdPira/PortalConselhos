@@ -119,9 +119,11 @@ class Show extends Component
                     'id' => 'm-' . $m->id,
                     'created_at' => Carbon::parse($dataRef),
                     'data' => Carbon::parse($dataRef),
+                    'hora' => null,
                     'assunto' => (object)['descricao' => 'Ex-Membros'],
                     'descricao' => "{$m->nome} - {$m->funcao} (" . ($m->segmento ?: 'N/A') . ")",
-                    'anexos' => collect()
+                    'anexos' => collect(),
+                    'arquivo' => null
                 ];
             });
         } else {

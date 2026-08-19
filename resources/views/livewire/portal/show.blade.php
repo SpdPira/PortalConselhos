@@ -1,3 +1,5 @@
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <div class="space-y-8 pb-12">
     <!-- Header -->
     <div class="bg-white rounded-lg shadow-sm border border-zinc-200 p-8 flex flex-col md:flex-row items-center md:items-start gap-6">
@@ -35,14 +37,14 @@
                 @if($conselho->facebook || $conselho->instagram)
                     <div class="flex items-start gap-4">
                         @if($conselho->facebook)
-                            <a href="{{ $conselho->facebook }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">
+                            <a href="{{ $conselho->facebook }}" target="_blank" class="text-primary hover:text-[#000066] flex items-center gap-1">
                                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M22.675 0h-21.35c-.733 0-1.325.593-1.325 1.326v21.348c0 .733.593 1.326 1.325 1.326h11.495v-9.294h-3.128v-3.622h3.128v-2.672c0-3.1 1.894-4.788 4.659-4.788 1.325 0 2.466.099 2.797.143v3.24l-1.918.001c-1.504 0-1.796.715-1.796 1.763v2.312h3.591l-.467 3.622h-3.124v9.294h6.116c.73 0 1.323-.593 1.323-1.326v-21.348c0-.733-.593-1.326-1.324-1.326z"></path></svg>
                                 Facebook
                             </a>
                         @endif
                         @if($conselho->instagram)
-                            <a href="{{ $conselho->instagram }}" target="_blank" class="text-primary hover:text-danger flex items-center gap-1">
-                                <svg style="width: 1.25rem; height: 1.25rem; color: #b00e0b;" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3h-8.5zm10.71-.21a1.08 1.08 0 11-2.16-.002c0 .597.483 1.08 1.08 1.08s1.08-.483 1.08-1.08zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.5a3.5 3.5 0 100 7A3.5 3.5 0 0012 8z"></path></svg>
+                            <a href="{{ $conselho->instagram }}" target="_blank" class="text-primary hover:text-[#000066] flex items-center gap-1">
+                                <svg style="width: 1.25rem; height: 1.25rem; color: #000066;" fill="currentColor" viewBox="0 0 24 24"><path d="M7.75 2h8.5A5.75 5.75 0 0122 7.75v8.5A5.75 5.75 0 0116.25 22h-8.5A5.75 5.75 0 012 16.25v-8.5A5.75 5.75 0 017.75 2zm0 1.5A4.25 4.25 0 003.5 7.75v8.5A4.25 4.25 0 007.75 20h8.5a4.25 4.25 0 004.25-4.25v-8.5A4.25 4.25 0 0016.25 3h-8.5zm10.71-.21a1.08 1.08 0 11-2.16-.002c0 .597.483 1.08 1.08 1.08s1.08-.483 1.08-1.08zM12 7a5 5 0 110 10A5 5 0 0112 7zm0 1.5a3.5 3.5 0 100 7A3.5 3.5 0 0012 8z"></path></svg>
                                 Instagram
                             </a>
                         @endif
@@ -98,13 +100,13 @@
         <div class="flex items-center justify-between mb-6 border-b border-zinc-400 pb-4">
             <h3 class="text-xl font-bold text-zinc-800">Calendário de Atividades</h3>
             <div class="flex items-center gap-4">
-                <button wire:click="prevMonth" wire:key="prev-month" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
+                <button wire:click="prevMonth" wire:key="prev-month" class="p-2 rounded bg-primary hover:bg-info text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
                 </button>
                 <span class="text-lg font-semibold text-primary capitalize w-40 text-center">
                     {{ \Carbon\Carbon::createFromDate($calendarYear, $calendarMonth, 1)->translatedFormat('F Y') }}
                 </span>
-                <button wire:click="nextMonth" wire:key="next-month" class="p-2 rounded bg-primary hover:bg-danger text-white transition-colors shadow-sm">
+                <button wire:click="nextMonth" wire:key="next-month" class="p-2 rounded bg-primary hover:bg-info text-white transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
                 </button>
             </div>
@@ -120,10 +122,10 @@
 
             <!-- Dias do Mês -->
             @foreach($this->calendarDays as $day)
-                <div class="h-14 sm:h-14 p-1 flex flex-col relative {{ $day['empty'] ? 'bg-zinc-100' : 'bg-white' }} {{ !empty($day['events']) ? 'ring-2 ring-inset ring-black z-10' : (isset($day['isToday']) && $day['isToday'] ? 'ring-2 ring-inset ring-primary bg-red-50/10 z-10' : '') }}">
+                <div class="h-14 sm:h-14 p-1 flex flex-col relative {{ $day['empty'] ? 'bg-zinc-150' : 'bg-white' }} {{ !empty($day['events']) ? 'ring-2 ring-inset ring-black z-10' : (isset($day['isToday']) && $day['isToday'] ? 'ring-2 ring-inset ring-primary bg-red-50/10 z-10' : '') }}">
                     @if(!$day['empty'])
                         <!-- Número do dia -->
-                        <span class="text-[9px] mt-[-1em] me-[-1em] sm:text-[9px] font-bold self-end mb-0 shrink-0 {{ isset($day['isToday']) && $day['isToday'] ? 'text-white bg-primary w-5 h-5 flex items-center justify-center rounded-full' : 'text-zinc-600' }}">
+                        <span class="text-[9px] sm:text-[9px] font-bold self-end mb-0 shrink-0 {{ isset($day['isToday']) && $day['isToday'] ? 'text-white bg-primary w-5 h-5 flex items-center justify-center rounded-full' : 'text-black' }}">
                             {{ $day['day'] }}
                         </span>
                         
@@ -219,10 +221,10 @@
                 $icones = [
                     'Legislação' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>',
                     'Atas' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>',
-                    'Resoluções' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
-                    'Recomendações' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
-                    'Reuniões Ordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>',
-                    'Reuniões Extraordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>',
+                    'Resoluções' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />',
+                    'Recomendações' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />',
+                    'Reuniões Ordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />',
+                    'Reuniões Extraordinárias' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>',
                     'Ex-Membros' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>'
                 ];
                 $defaultIcon = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>';
@@ -240,9 +242,9 @@
                     </thead>
                     <tbody class="divide-y divide-zinc-200 bg-white">
                         @forelse($calendarios as $calendario)
-                            <tr class="hover:bg-zinc-50 transition-colors">
+                            <tr class="hover:bg-zinc-200 transition-colors">
                                 <td class="p-4 text-sm text-zinc-600 font-medium whitespace-nowrap">
-                                    {{ $calendario->created_at->format('d/m/Y') }}
+                                    {{ \Carbon\Carbon::parse($calendario->data ?? $calendario->created_at)->format('d/m/Y') }}
                                 </td>
                                 <td class="p-4">
                                     <div class="flex items-center gap-2">
@@ -251,7 +253,7 @@
                                                 {!! $icones[$calendario->assunto->descricao] ?? $defaultIcon !!}
                                             </svg>
                                         </div>
-                                        <span class="text-sm font-bold uppercase tracking-wider text-primary truncate">
+                                        <span class="text-xs font-bold uppercase tracking-wider text-primary truncate">
                                             {{ $calendario->assunto->descricao }}
                                         </span>
                                     </div>
@@ -263,13 +265,13 @@
                                     @if($calendario->anexos->count() > 0 || $calendario->arquivo)
                                         <div class="flex flex-col gap-1">
                                             @if($calendario->arquivo)
-                                                <a href="{{ Storage::url($calendario->arquivo) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-white bg-primary hover:bg-danger px-2 py-1.5 border border-primary rounded shadow-sm w-full transition-colors" title="Ver Arquivo">
+                                                <a href="{{ Storage::url($calendario->arquivo) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-white bg-primary hover:bg-info px-2 py-1.5 border border-primary rounded shadow-sm w-full transition-colors" title="Ver Arquivo">
                                                     <svg class="w-3.5 h-3.5 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                                     <span>Visualizar</span>
                                                 </a>
                                             @endif
                                             @foreach($calendario->anexos as $anexo)
-                                                <a href="{{ Storage::url($anexo->caminho) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-white bg-primary hover:bg-danger px-2 py-1.5 border border-primary rounded shadow-sm w-full transition-colors" title="Ver Anexo">
+                                                <a href="{{ Storage::url($anexo->caminho) }}" target="_blank" class="inline-flex items-center justify-center gap-1 text-xs text-white bg-primary hover:bg-info px-2 py-1.5 border border-primary rounded shadow-sm w-full transition-colors" title="Ver Anexo">
                                                     <svg class="w-3.5 h-3.5 shrink-0 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
                                                     <span>Baixar</span>
                                                 </a>
