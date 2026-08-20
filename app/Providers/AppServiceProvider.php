@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
                 .fi-main,
                 .fi-app-layout,
                 .fi-simple-layout,
-                .fi-simple-page,
                 .fi-main-ctn {
                     background-color: transparent !important;
                 }
@@ -149,12 +148,20 @@ class AppServiceProvider extends ServiceProvider
                     background-color: #2f4b86 !important; /* Topbar Slate 900 */ /*  */
                     border-bottom: 1px solid #41587e !important; /*  */
                 }
-                html:not(.dark) .fi-section,
-                html:not(.dark) .fi-ta-container,
-                html:not(.dark) .fi-modal-window,
-                html:not(.dark) .fi-fo-repeater-item,
-                html:not(.dark) .fi-fo-repeater-item-has-header,
-                /* html:not(.dark) .fi-simple-main, /* Adicionado o card central de Login/Profile */
+                html:not(.dark) .fi-layout .fi-section,
+                html:not(.dark) .fi-layout .fi-ta-container,
+                html:not(.dark) .fi-layout .fi-modal-window,
+                html:not(.dark) .fi-layout .fi-fo-repeater-item,
+                html:not(.dark) .fi-layout .fi-fo-repeater-item-has-header,
+                html:not(.dark) .fi-layout .fi-dropdown-panel {
+                    background-color: #c4d2e6 !important;
+                    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                }
+                html:not(.dark) .fi-layout .fi-input-wrp {
+                    background-color: #c4d2e6 !important;
+                    border-color: rgba(255, 255, 255, 0.15) !important;
+                }
+
                 html:not(.dark) .fi-dropdown-panel {
                     background-color: #c4d2e6 !important; /* Cartões e Modais Slate 800 */ /* c4d2e6 */
                     border: 1px solid rgba(255, 255, 255, 0.1) !important; /*  */
@@ -227,10 +234,7 @@ class AppServiceProvider extends ServiceProvider
                     color: #000000 !important; /*  */
                 }
 
-                html:not(.dark) .fi-input-wrp {
-                    background-color: #c4d2e6 !important; /* Inputs Slate 900 */ /* c4d2e6 */
-                    border-color: rgba(255, 255, 255, 0.15) !important; /*  */
-                }
+
                 html:not(.dark) input,
                 html:not(.dark) select,
                 html:not(.dark) textarea {
@@ -242,16 +246,16 @@ class AppServiceProvider extends ServiceProvider
                     opacity: 1 !important;
                 }
                 /* Ajustar cores de textos no tema claro escurecido do Filament */
-                html:not(.dark) .text-gray-950,
-                html:not(.dark) .text-gray-900,
-                html:not(.dark) .text-gray-800,
-                html:not(.dark) .text-gray-700,
-                html:not(.dark) .text-gray-600 {
-                    color: #f8fafc !important; /* Slate 50 */ /*  */
+                html:not(.dark) .fi-layout .text-gray-950,
+                html:not(.dark) .fi-layout .text-gray-900,
+                html:not(.dark) .fi-layout .text-gray-800,
+                html:not(.dark) .fi-layout .text-gray-700,
+                html:not(.dark) .fi-layout .text-gray-600 {
+                    color: #f8fafc !important;
                 }
-                html:not(.dark) .text-gray-500,
-                html:not(.dark) .text-gray-400 {
-                    color: #cbd5e1 !important; /* Slate 300 */ /*  */
+                html:not(.dark) .fi-layout .text-gray-500,
+                html:not(.dark) .fi-layout .text-gray-400 {
+                    color: #cbd5e1 !important;
                 }
                 /* Divisores de tabelas e listas */
                 html:not(.dark) .border-gray-200,
@@ -286,11 +290,11 @@ class AppServiceProvider extends ServiceProvider
             fn (): string => '
             <div class="fixed inset-0 overflow-hidden pointer-events-none">
                 <!-- degradê do tema claro -->
-                <div class="fixed dark:hidden w-full h-full overflow-hidden inset-0">
-                    <div class="blob-1"></div>
-                    <div class="blob-3"></div>
-                    <div class="blob-2"></div>
-                </div>
+                <!-- <div class="fixed dark:hidden w-full h-full overflow-hidden inset-0">
+                     <div class="blob-1"></div>
+                     <div class="blob-3"></div>
+                     <div class="blob-2"></div>
+                </div> -->
                 <!-- degradê do tema escuro original -->
                 <div class="hidden dark:block">
                     <div class="absolute -top-[40%] -left-[20%] w-[80%] h-[80%] rounded-full bg-blue-800/30 blur-[120px]"></div>

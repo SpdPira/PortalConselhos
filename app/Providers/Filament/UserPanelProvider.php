@@ -10,6 +10,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\Enums\ThemeMode;
 use Filament\PanelProvider;
+use Filament\Support\Assets\Css;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
@@ -25,9 +26,11 @@ class UserPanelProvider extends PanelProvider
     public function panel(Panel $panel): Panel
     {
         return $panel
+            ->default()
             ->id('user')
             ->path('user')
             ->login()
+            ->passwordReset()
             ->tenant(\App\Models\Conselho::class)
             ->tenantProfile(\App\Filament\User\Pages\Tenancy\EditConselhoProfile::class)
             ->font('Instrument Sans')
@@ -39,7 +42,7 @@ class UserPanelProvider extends PanelProvider
                 'warning'       => Color::Orange,
             ])
             ->assets([
-                \Filament\Support\Assets\Css::make('filament-custom', resource_path('css/filament.css')),
+                Css::make('filament-custom', resource_path('css/filament.css')),
             ])
             ->favicon(asset('assets/images/logo_pirassununga.png'))
             ->brandLogo(asset('assets/images/logo_pirassununga.png'))
@@ -70,6 +73,8 @@ class UserPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->tenantMiddleware([
                 \App\Http\Middleware\EnsureTermsAccepted::class,
             ]);
     }
